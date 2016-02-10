@@ -6,7 +6,9 @@ require 'rake'
 Rake::TaskManager.class_eval do
   def alias_task(fq_name)
     new_name = "#{fq_name}:original"
-    @tasks[new_name] = @tasks.delete(fq_name)
+    block = @tasks.delete(fq_name)
+    @tasks[new_name] = block
+    Rake::Task.define_task(new_name, &block)
   end
 end
 
